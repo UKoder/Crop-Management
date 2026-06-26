@@ -1,0 +1,415 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg-color: #0f172a;
+  --glass-bg: rgba(30, 41, 59, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --primary-color: #10b981;
+  --primary-hover: #059669;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --user-msg-bg: rgba(16, 185, 129, 0.2);
+  --bot-msg-bg: rgba(51, 65, 85, 0.6);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.15) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 900px;
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.header {
+  padding: 20px 30px;
+  border-bottom: 1px solid var(--glass-border);
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  font-size: 28px;
+  background: linear-gradient(135deg, #34d399, #059669);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: pulse 2s infinite alternate;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.05); }
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.messages-area {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  scroll-behavior: smooth;
+}
+
+.messages-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messages-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messages-area::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: var(--text-secondary);
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.empty-state h2 {
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 30px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.suggestions button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.suggestions button:hover {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.message-wrapper {
+  display: flex;
+  width: 100%;
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+.message-wrapper.user {
+  justify-content: flex-end;
+}
+
+.message-wrapper.bot {
+  justify-content: flex-start;
+}
+
+.message-bubble {
+  max-width: 80%;
+  padding: 16px 20px;
+  border-radius: 20px;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.user .message-bubble {
+  background: var(--user-msg-bg);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-bottom-right-radius: 4px;
+}
+
+.bot .message-bubble {
+  background: var(--bot-msg-bg);
+  border: 1px solid var(--glass-border);
+  border-bottom-left-radius: 4px;
+}
+
+.loading-bubble {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 16px 24px !important;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--text-secondary);
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.dot:nth-child(1) { animation-delay: -0.32s; }
+.dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.input-area {
+  padding: 24px 30px;
+  background: rgba(15, 23, 42, 0.6);
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.chat-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: 16px 20px;
+  border-radius: 16px;
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.chat-input:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.chat-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.send-button {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.send-button:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.send-button:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+
+/* Fix for pre/code in markdown if needed later */
+pre, code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  background: rgba(15, 23, 42, 0.6);
+  border-top: 1px solid var(--glass-border);
+}
+
+.image-preview-container {
+  position: relative;
+  padding: 16px 30px 0 30px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.image-preview {
+  height: 60px;
+  width: auto;
+  border-radius: 8px;
+  border: 2px solid var(--primary-color);
+  object-fit: cover;
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 10px;
+  left: 80px;
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.remove-image-btn:hover {
+  background: #dc2626;
+  transform: scale(1.1);
+}
+
+.upload-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.upload-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--primary-color);
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.message-image {
+  max-width: 100%;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Markdown styling */
+.markdown-body {
+  color: inherit;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.markdown-body p {
+  margin-bottom: 0.8em;
+}
+
+.markdown-body p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body ul, .markdown-body ol {
+  margin-bottom: 0.8em;
+  padding-left: 1.5em;
+}
+
+.markdown-body li {
+  margin-bottom: 0.4em;
+}
+
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.markdown-body h1 { font-size: 1.5em; }
+.markdown-body h2 { font-size: 1.3em; }
+.markdown-body h3 { font-size: 1.1em; }
+
+.markdown-body strong {
+  font-weight: 600;
+  color: #fff;
+}
+
+.user .markdown-body strong {
+  color: #fff;
+}
