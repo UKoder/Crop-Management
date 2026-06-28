@@ -10,6 +10,25 @@ Kisan-Mitra is an intelligent, multi-agent agricultural assistant built with mod
 - **Agentic Workflow:** Utilizes a dual-agent workflow consisting of a `crop_doctor` (for diagnostics) and a `cycle_planner` (for strategic, weather-aware planning). The AI is strictly prompted to provide direct, straightforward answers to farmers, eliminating internal agent chatter.
 - **Modern User Interface:** A sleek, glassmorphic React frontend built with Vite, featuring markdown rendering for easy-to-read advisory reports. Fully responsive design optimized for mobile farming conditions.
 
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    A[Farmer Input: Prompt + Crop Image] -->|Multimodal Input| B(crop_doctor Agent Node)
+    B -->|Pathology Diagnosis| C(cycle_planner Agent Node)
+    D[Local FastMCP Server Engine] -.->|Real-time Weather Alerts| C
+    C -->|Weather-Aware Blueprint| E[Live Advisory Output]
+
+    subgraph External Data
+    D -.->|Queries| F((Open-Meteo REST API))
+    end
+    
+    classDef agent fill:#10b981,stroke:#059669,stroke-width:2px,color:#fff;
+    classDef server fill:#3b82f6,stroke:#2563eb,stroke-width:2px,color:#fff;
+    class B,C agent;
+    class D server;
+```
+
 ## Technology Stack
 
 - **Backend:** Python, FastAPI, Google GenAI SDK, Google ADK (Agentic Development Kit)
@@ -40,8 +59,7 @@ GEMINI_API_KEY="your_api_key_here"
    - Linux/Mac: `source .venv/bin/activate`
 3. Install dependencies:
    ```bash
-   pip install fastapi uvicorn pydantic python-dotenv google-genai
-   # Install the ADK libraries
+   pip install -r requirements.txt
    ```
 4. Run the backend server:
    ```bash
