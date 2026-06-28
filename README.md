@@ -5,9 +5,10 @@ Kisan-Mitra is an intelligent, multi-agent agricultural assistant built with mod
 ## Features
 
 - **Multimodal AI Assistant:** Upload images of damaged crops, and the AI will analyze the disease/pest, identify the crop type, and provide immediate actionable fixes and safe practices.
+- **In-App WebRTC Camera Integration:** Capture photos of crops directly from your mobile or desktop device using the built-in native camera interface without leaving the application.
 - **Context-Aware Advice:** The chat agent integrates seamlessly with local weather data (using MCP tools) to adapt agricultural advice based on current live weather conditions in your district.
-- **Agentic Workflow:** Utilizes a dual-agent workflow consisting of a `crop_doctor` (for diagnostics) and a `cycle_planner` (for strategic, weather-aware planning).
-- **Modern User Interface:** A sleek, glassmorphic React frontend built with Vite, featuring markdown rendering for easy-to-read advisory reports.
+- **Agentic Workflow:** Utilizes a dual-agent workflow consisting of a `crop_doctor` (for diagnostics) and a `cycle_planner` (for strategic, weather-aware planning). The AI is strictly prompted to provide direct, straightforward answers to farmers, eliminating internal agent chatter.
+- **Modern User Interface:** A sleek, glassmorphic React frontend built with Vite, featuring markdown rendering for easy-to-read advisory reports. Fully responsive design optimized for mobile farming conditions.
 
 ## Technology Stack
 
@@ -65,3 +66,9 @@ GEMINI_API_KEY="your_api_key_here"
 
 ## Usage
 Open `http://localhost:5173` in your browser. Type a question or upload a photo of your crop to receive personalized, AI-driven agricultural advice!
+
+## 🛡️ Operational Guardrails & Safety
+To ensure smallholder farming livelihoods are protected from hallucinated actions, the `cycle_planner` configuration relies on explicit safety boundaries:
+
+- **Rain Protection Loop**: If the local MCP weather report detects a WMO code matching precipitation, chemical fertilizer recommendations are completely blocked by system prompts to prevent environmental toxic runoff.
+- **Drone Wind Boundaries**: Aerial drone or sensitive mist-spraying operations are flagged with a hard warning if local telemetry registers sustained wind velocities exceeding 20 km/h.

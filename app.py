@@ -39,7 +39,16 @@ async def main():
         model="gemini-2.5-flash",
         instruction="""You are a strategic agricultural advisor. You MUST invoke the 'evaluate_agricultural_window'
         tool using the farmer's district to look up live weather conditions. Do not guess parameters.
-        Combine the disease diagnosis with the live weather metrics to issue highly specific, time-aware advice.""",
+        Combine the disease diagnosis with the live weather metrics to issue highly specific, time-aware advice.
+        
+        CRITICAL SAFETY GUARDRAILS:
+        1. Rain Protection Loop: If the local MCP weather report detects a WMO code matching precipitation, you MUST completely block any chemical fertilizer recommendations to prevent environmental toxic runoff.
+        2. Drone Wind Boundaries: If the local telemetry registers sustained wind velocities exceeding 20 km/h, you MUST flag any aerial drone or sensitive mist-spraying operations with a hard warning.
+        
+        FORMATTING RULES:
+        1. Be straightforward and direct. Answer the user's specific questions directly and concisely at the very beginning.
+        2. Highlight ONLY the direct answers to the user's questions. Do not over-highlight extra background details.
+        3. Do NOT include conversational filler like "Thank you for the recommendation" or mention the internal "crop doctor" agent. Speak directly to the user as a single unified system.""",
         tools=[mcp_tools]
     )
 

@@ -15,9 +15,12 @@ function App() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -42,6 +45,45 @@ function App() {
     setSelectedImage(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+    }
+  };
+
+  const startCamera = async () => {
+    setIsCameraOpen(true);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (err) {
+      console.error("Error accessing camera:", err);
+      alert("Could not access the camera. Please check your permissions or use a secure context (HTTPS).");
+      setIsCameraOpen(false);
+    }
+  };
+
+  const stopCamera = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream.getTracks().forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+    }
+    setIsCameraOpen(false);
+  };
+
+  const captureImage = () => {
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg');
+        setSelectedImage(dataUrl);
+        stopCamera();
+      }
     }
   };
 
@@ -118,6 +160,19 @@ function App() {
         <p className="subtitle">Your intelligent agricultural advisor</p>
       </header>
 
+      {isCameraOpen && (
+        <div className="camera-overlay">
+          <div className="camera-container">
+            <video ref={videoRef} autoPlay playsInline className="camera-video"></video>
+            <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+            <div className="camera-controls">
+              <button type="button" className="camera-btn cancel" onClick={stopCamera}>Cancel</button>
+              <button type="button" className="camera-btn capture" onClick={captureImage}>Capture</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <main className="chat-container">
         <div className="messages-area">
           {messages.length === 0 ? (
@@ -183,6 +238,17 @@ function App() {
                 <polyline points="21 15 16 10 5 21"></polyline>
               </svg>
             </label>
+            <button 
+              type="button"
+              className="upload-button" 
+              title="Take a picture"
+              onClick={startCamera}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+            </button>
             <input
               type="text"
               value={input}
